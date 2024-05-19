@@ -69,6 +69,12 @@ calc_areal_elongation_from_elongation_at_psi95 = Algorithm.from_single_function(
     name="calc_areal_elongation_from_elongation_at_psi95",
 )
 
+calc_elongation_at_psi95_from_areal_elongation = Algorithm.from_single_function(
+    func=lambda areal_elongation, elongation_ratio_areal_to_psi95: areal_elongation / elongation_ratio_areal_to_psi95,
+    return_keys=["elongation_psi95"],
+    name="calc_elongation_at_psi95_from_areal_elongation",
+)
+
 calc_separatrix_elongation_from_areal_elongation = Algorithm.from_single_function(
     func=lambda areal_elongation, elongation_ratio_sep_to_areal: areal_elongation * elongation_ratio_sep_to_areal,
     return_keys=["separatrix_elongation"],

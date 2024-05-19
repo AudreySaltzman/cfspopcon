@@ -3,6 +3,7 @@ import numpy as np
 import xarray as xr
 
 from ....unit_handling import Unitfull
+from ....unit_handling import dimensionless_magnitude as dmag
 
 
 def calc_fa_Sums_Na(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]) -> tuple[Unitfull, Unitfull]:
@@ -30,8 +31,8 @@ def calc_fa_Sums_Na(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray
     def func2(sqrt_eps: float) -> float:
         return float(np.sum(a[2:] * sqrt_eps**m))
 
-    sum1 = xr.apply_ufunc(func1, sqrt_aspect_ratio, vectorize=True)
-    sum2 = xr.apply_ufunc(func2, sqrt_aspect_ratio, vectorize=True)
+    sum1 = xr.apply_ufunc(func1, dmag(sqrt_aspect_ratio), vectorize=True)  # type:ignore[arg-type]
+    sum2 = xr.apply_ufunc(func2, dmag(sqrt_aspect_ratio), vectorize=True)  # type:ignore[arg-type]
 
     return sum1, sum2
 
@@ -54,7 +55,7 @@ def calc_fa_Sum_Ne(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]
     def func(epsilon: float) -> float:
         return float(np.sum(e * np.sqrt(epsilon) ** m))
 
-    return xr.apply_ufunc(func, inverse_aspect_ratio, vectorize=True)
+    return xr.apply_ufunc(func, dmag(inverse_aspect_ratio), vectorize=True)
 
 
 def calc_fb_Sum_Nb(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]) -> Unitfull:
@@ -76,7 +77,7 @@ def calc_fb_Sum_Nb(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]
     def func(epsilon: float) -> float:
         return float(np.sum(b[n] * epsilon ** (3 + n)))
 
-    return xr.apply_ufunc(func, inverse_aspect_ratio, vectorize=True)
+    return xr.apply_ufunc(func, dmag(inverse_aspect_ratio), vectorize=True)
 
 
 def calc_fc_Sum_Nc(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]) -> Unitfull:
@@ -94,7 +95,10 @@ def calc_fc_Sum_Nc(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]
     c = coeffs["c"]
     m = np.arange(1, 4)
 
-    return np.sum(c * inverse_aspect_ratio ** (2 * m))
+    def func(eps: float) -> float:
+        return float(np.sum(c * eps ** (2 * m)))
+
+    return xr.apply_ufunc(func, dmag(inverse_aspect_ratio), vectorize=True)
 
 
 def calc_fd_Sum_Nd(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]) -> Unitfull:
@@ -112,7 +116,10 @@ def calc_fd_Sum_Nd(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]
     d = coeffs["d"]
     m = np.arange(2, 4)
 
-    return np.sum(d[1:] * inverse_aspect_ratio ** (m - 1))
+    def func(eps: float) -> float:
+        return float(np.sum(d[1:] * eps ** (m - 1)))
+
+    return xr.apply_ufunc(func, dmag(inverse_aspect_ratio), vectorize=True)
 
 
 def calc_fg_Sums_Na(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]) -> Unitfull:
@@ -153,7 +160,7 @@ def calc_fg_Sum_Ce(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]
     def func(epsilon: float) -> float:
         return float(np.sum(m / 2 * e * np.sqrt(epsilon) ** (m - 1)))
 
-    return xr.apply_ufunc(func, inverse_aspect_ratio, vectorize=True)
+    return xr.apply_ufunc(func, dmag(inverse_aspect_ratio), vectorize=True)
 
 
 def calc_fh_Sum_Cb(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]) -> Unitfull:
@@ -174,7 +181,7 @@ def calc_fh_Sum_Cb(inverse_aspect_ratio: Unitfull, coeffs: dict[str, np.ndarray]
     def func(epsilon: float) -> float:
         return float(np.sum((n + 3.5) * b[n] * epsilon ** (n + 3)))
 
-    return xr.apply_ufunc(func, inverse_aspect_ratio, vectorize=True)
+    return xr.apply_ufunc(func, dmag(inverse_aspect_ratio), vectorize=True)
 
 
 def calc_fa(

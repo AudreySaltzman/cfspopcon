@@ -3,6 +3,7 @@
 TODO: Isaac please check this.
 """
 import numpy as np
+import xarray as xr
 
 from ....algorithm_class import Algorithm
 from ....named_options import SurfaceInductanceCoeffs, VertMagneticFieldEq
@@ -25,6 +26,11 @@ def set_surface_inductance_coeffs(surface_inductance_coefficients: SurfaceInduct
     2. Hirshman's Coefficients cite:'hirshman'.
 
     """
+    if isinstance(surface_inductance_coefficients, xr.DataArray):
+        surface_inductance_coefficients = surface_inductance_coefficients.item()
+    if isinstance(surface_inductance_coefficients, str):
+        surface_inductance_coefficients = SurfaceInductanceCoeffs[surface_inductance_coefficients]
+
     if surface_inductance_coefficients == SurfaceInductanceCoeffs.Barr:
         return dict(
             a=np.array([1.438, 2.139, 9.387, -1.939]),
@@ -152,7 +158,7 @@ def calc_vertical_field_mutual_inductance(
     fc = calc_fc(inverse_aspect_ratio=inverse_aspect_ratio, coeffs=coeffs)
     fd = calc_fd(inverse_aspect_ratio=inverse_aspect_ratio, coeffs=coeffs)
 
-    return float((1 - inverse_aspect_ratio) ** 2 / ((1 - inverse_aspect_ratio) ** 2 * fc + fd * np.sqrt(areal_elongation)))
+    return (1 - inverse_aspect_ratio) ** 2 / ((1 - inverse_aspect_ratio) ** 2 * fc + fd * np.sqrt(areal_elongation))
 
 
 @Algorithm.register_algorithm(return_keys=["invmu_0_dLedR"])
@@ -239,6 +245,11 @@ def calc_vertical_magnetic_field(
     Returns:
         [T] :term:`vertical_magnetic_field`
     """
+    if isinstance(vertical_magnetic_field_equation, xr.DataArray):
+        vertical_magnetic_field_equation = vertical_magnetic_field_equation.item()
+    if isinstance(vertical_magnetic_field_equation, str):
+        vertical_magnetic_field_equation = VertMagneticFieldEq[vertical_magnetic_field_equation]
+
     if vertical_magnetic_field_equation == VertMagneticFieldEq.Barr:
         assert np.all(np.abs(dmag(invmu_0_dLedR)) > 0), "Cannot compute Barr vertical magnetic field with invmu_0_dLedR = 0."
 
