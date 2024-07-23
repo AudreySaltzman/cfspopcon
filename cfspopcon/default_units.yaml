@@ -140,6 +140,7 @@ target_electron_temp: "eV"
 target_q_parallel: "GW / m**2"
 tau_e_scaling_uses_P_in: null
 tau_e_scaling: null
+tau_e_L_mode_scaling: null
 temperature_peaking: ""
 toroidal_flux_expansion: ""
 trapped_particle_fraction: ""

@@ -24,8 +24,11 @@ fill:
         units: MW
       greenwald_fraction:
         max: 0.9
-      ratio_of_P_SOL_to_P_LH:
-        min: 1.0
+      P_fusion:
+        max: 140.0
+        units: MW
+      # ratio_of_P_SOL_to_P_LH:
+      #   min: 1.0
 
 points:
   PRD:
@@ -59,6 +62,6 @@ contour:
   P_fusion:
     label: "$P_{fusion}$"
     color: "tab:purple"
-    levels: [50.0, 100.0, 150.0, 200.0]
+    levels: [50.0, 100.0, 140.0, 200.0]
     format: "1.2g"
   
