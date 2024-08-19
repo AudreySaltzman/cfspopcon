@@ -1132,9 +1132,10 @@ P_fusion:
   - calc_fusion_gain
   - require_P_fusion_less_than_P_fusion_limit
 P_fusion_upper_limit:
-  default_units: null
+  default_units: megawatt
   description:
-  - UNKNOWN. Please add a description and default units for this variable.
+  - The maximum amount of fusion power before heavier_fuel_species_fraction is reduced
+    to keep P_fusion below this limit.
   set_by: []
   used_by:
   - require_P_fusion_less_than_P_fusion_limit
