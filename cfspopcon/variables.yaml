@@ -612,11 +612,13 @@ heavier_fuel_species_fraction:
   description:
   - Fraction of fuel ions which are the heavier species. i.e. for DT fusion, this
     is :math:`f_T = n_T/(n_T+n_D)`.
-  set_by: []
+  set_by:
+  - require_P_fusion_less_than_P_fusion_limit
   used_by:
   - calc_average_ion_mass
   - calc_fusion_power
   - calc_neutron_flux_to_walls
+  - require_P_fusion_less_than_P_fusion_limit
 impurity_charge_state:
   default_units: dimensionless
   description:
@@ -1128,6 +1130,14 @@ P_fusion:
   - calc_fusion_power
   used_by:
   - calc_fusion_gain
+  - require_P_fusion_less_than_P_fusion_limit
+P_fusion_upper_limit:
+  default_units: null
+  description:
+  - UNKNOWN. Please add a description and default units for this variable.
+  set_by: []
+  used_by:
+  - require_P_fusion_less_than_P_fusion_limit
 P_in:
   default_units: megawatt
   description:
