@@ -55,7 +55,6 @@ algorithms:
   - calc_ohmic_power
   # Calculate the fusion power and gain.
   - calc_fusion_power
-  - require_P_fusion_less_than_P_fusion_limit
   - calc_neutron_flux_to_walls
   - calc_auxillary_power
   - calc_fusion_gain
@@ -170,8 +169,6 @@ fraction_of_external_power_coupled: 0.9
 
 # What fusion reaction are we using?
 fusion_reaction: DTFusionHively
-# Lower limit on the fusion power in MW
-P_fusion_upper_limit: 140.0
 # Fraction of fuel ions which are the heavier species
 heavier_fuel_species_fraction: 0.5
 
