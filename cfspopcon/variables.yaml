@@ -616,9 +616,9 @@ heavier_fuel_species_fraction:
   - require_P_fusion_less_than_P_fusion_limit
   used_by:
   - calc_average_ion_mass
+  - require_P_fusion_less_than_P_fusion_limit
   - calc_fusion_power
   - calc_neutron_flux_to_walls
-  - require_P_fusion_less_than_P_fusion_limit
 impurity_charge_state:
   default_units: dimensionless
   description:
