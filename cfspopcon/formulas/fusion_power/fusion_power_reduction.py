@@ -1,3 +1,5 @@
+"""Reduce fusion power to limit by decreasing heavier fuel species fraction."""
+
 import numpy as np
 import xarray as xr
 from numpy import float64
