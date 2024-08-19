@@ -2,6 +2,8 @@ import xarray as xr
 import numpy as np
 from ...algorithm_class import Algorithm
 from ...unit_handling import Unitfull, ureg
+from numpy.typing import NDArray
+from numpy import float64
 
 from .fusion_rates import calc_fusion_power
 
@@ -10,7 +12,7 @@ from .fusion_rates import calc_fusion_power
 def require_P_fusion_less_than_P_fusion_limit(
     P_fusion_upper_limit: Unitfull,
     P_fusion: Unitfull,
-    heavier_fuel_species_fraction: float,
+    heavier_fuel_species_fraction: NDArray[float64],
 ) -> tuple[Unitfull, ...]:
     """Change heavier_fuel_species_fraction to reduce P_fusion to P_fusion_limit
 
@@ -21,14 +23,14 @@ def require_P_fusion_less_than_P_fusion_limit(
 
     Returns:
         :term:`heavier_fuel_species_fraction`
+        
     """
-    # If P_fusion is already below the limit, return the current heavier_fuel_species_fraction
-    if P_fusion <= P_fusion_upper_limit:
-        return heavier_fuel_species_fraction
+    # If P_fusion is less than the limit, we want the heavier_fuel_species_fraction to stay the same
+    P_fusion_for_adjustment = xr.apply_ufunc(np.maximum, P_fusion, P_fusion_upper_limit) 
 
-    # If P_fusion is above the limit, reduce (take lower root) heavier_fuel_species_fraction until P_fusion is below the limit
-    else:
-        new_heavier_fuel_species_fraction = 1 - np.sqrt(
-            1 - P_fusion_upper_limit / P_fusion * heavier_fuel_species_fraction * (1 - heavier_fuel_species_fraction)
+
+    new_heavier_fuel_species_fraction = 0.5 - 0.5 * np.sqrt(
+            1 - 4 * P_fusion_upper_limit / P_fusion_for_adjustment * heavier_fuel_species_fraction * (1 - heavier_fuel_species_fraction)
         )
-        return new_heavier_fuel_species_fraction
+    
+    return new_heavier_fuel_species_fraction
