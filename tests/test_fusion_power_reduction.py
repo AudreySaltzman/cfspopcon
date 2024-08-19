@@ -27,5 +27,4 @@ def test_require_P_fusion_less_than_P_fusion_limit():
         heavier_fuel_species_fraction=heavier_fuel_species_fraction,
     )
 
-    print(new_heavier_fuel_species_fraction)
     np.testing.assert_allclose(magnitude_in_units(new_heavier_fuel_species_fraction, ureg.dimensionless), 0.4, rtol=1e-2)
